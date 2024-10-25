@@ -39,9 +39,21 @@ jobs:
         with:
           name: production-build
           path: dist/
-            # Step 7: Deploy to GitHub Pages
+       # Step 7: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
+          publish_branch: gh-pages
+          cname: example.com # where cname is the custom domain name
+        # Step 8: Notify the team on Slack
+      - name: Notify on Slack
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_USERNAME: GitHub Actions
+          SLACK_ICON: https://avatars.githubusercontent.com/u/44036562?s=200&v=4
+          SLACK_COLOR: good
+          SLACK_TITLE: 'Deployment Successful'
+          SLACK_MESSAGE: 'The deployment was successful. The site is live at https://example.com'
